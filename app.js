@@ -5,20 +5,22 @@ const exprhb = require('express-handlebars');
 
 app.use(express.static(path.join(__dirname, 'public')));
 
+
+//Set view engine
+
 app.engine('handlebars', exprhb({defaultLayout: 'home'}));
 app.set('view engine','handlebars');
 
-app.get('/', (req,res) => {
-    res.render('home/index');
-});
+//Load routes
+
+const main = require('./routes/home/index');
+const admin = require('./routes/admin/index');
+
+//Use routes
 
 
-
-
-
-
-
-
+app.use('/admin', admin);
+app.use('/', main);
 
 
 
