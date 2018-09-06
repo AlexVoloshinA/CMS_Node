@@ -6,6 +6,12 @@
  html {
     position: relative;
     min-height: 100%; }
+
+  .img--small {
+    height: 60px;
+    width: auto;
+    
+  }  
   
   body {
     overflow-x: hidden; }
@@ -345,3 +351,5 @@
     body.sidenav-toggled footer.sticky-footer {
       width: calc(100% - 55px); } }
   
+
+      

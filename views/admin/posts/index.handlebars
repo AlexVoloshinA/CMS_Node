@@ -1,13 +1,17 @@
 <h1>All Posts</h1>
 
+    
 
 <table class="table table-bordered">
     <thead>
         <tr>
             <th>Id</th>
             <th>Title</th>
+            <th>File</th>
             <th>Status</th>
             <th>Allow Comments</th>
+            <th>Date</th>
+            
             <th>Edit</th>
             <th>Delete</th>
             
@@ -20,8 +24,15 @@
         <tr>
             <td>{{id}}</td>
             <td>{{title}}</td>
+            <td>
+                <img class="img--small" src="/uploads/{{file}}" alt="Picture of a file">
+
+            </td>
             <td>{{status}}</td>
             <td>{{allowComments}}</td>
+            
+            <th>{{generateDate date 'MMM Do YYYY'}}</th>
+            
             <td><a href="/admin/posts/edit/{{id}}" class="btn btn-info">Edit</a></td>
             <td>
 

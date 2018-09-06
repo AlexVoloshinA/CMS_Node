@@ -5,7 +5,11 @@ const exprhb = require('express-handlebars');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const methodOverride = require('method-override');
+const upload = require('express-fileupload');
+const session = require('express-session');
+const flash = require('connect-flash');
 
+process.env.PWD = process.cwd();
 mongoose.Promise = global.Promise;
 
 mongoose.connect('mongodb://localhost:27017/cms').then((db) => {
@@ -15,13 +19,18 @@ mongoose.connect('mongodb://localhost:27017/cms').then((db) => {
 
 app.use(express.static(path.join(__dirname, 'public')));
 
-
 //Set view engine
 
-const {select} = require('./helpers/handlebars-helpers');
+const {select, generateDate} = require('./helpers/handlebars-helpers');
 
-app.engine('handlebars', exprhb({defaultLayout: 'home', helpers: {select: select}}));
+app.engine('handlebars', exprhb({defaultLayout: 'home', helpers: {select: select, generateDate: generateDate}}));
 app.set('view engine','handlebars');
+
+
+// Upload Middleware
+
+app.use(upload());
+
 
 // Body parser
 
@@ -32,6 +41,26 @@ app.use(bodyParser.json());
 //Method override
 
 app.use(methodOverride('_method'));
+
+
+app.use(session({
+    secret: 'alexvoloshin2000',
+    resave: true,
+    saveUninitialized: true,
+    cookie: {secure: true}
+
+}));
+
+app.use(flash());
+
+
+//Local variables using Middleware
+
+app.use((req,res,next) => {
+    debugger;
+    res.locals.success_message = req.flash('success_message');
+    next();
+});
 
 //Load routes
 
