@@ -6,6 +6,7 @@ const fs = require('fs');
 const path = require('path');
 const moment = require('moment');
 const Category = require('../../models/Category');
+const {userAuthenticated} = require('../../helpers/authentication');
 
 router.all('/*', (req,res,next) => {
     req.app.locals.layout = 'admin';
