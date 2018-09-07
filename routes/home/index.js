@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const Post = require('../../models/Post');
+const Category = require('../../models/Category');
 
 router.all('/*', (req,res,next) => {
     req.app.locals.layout = 'home';
@@ -11,12 +12,14 @@ router.get('/', async (req,res) => {
 
     let posts = await Post.find();
 
+    let category = await Category.find({});
+
     // req.session.alex = 'Alex Voloshin';
 
     // if(req.session.alex){
     //     console.log(`We found it ${req.session.alex}`);
     // }
-    res.render('home/index', {posts: posts});
+    res.render('home/index', {posts: posts, category: category});
 });
 
 router.get('/about', (req,res) => {
@@ -34,8 +37,8 @@ router.get('/register', (req,res) => {
 router.get('/post/:id', async (req,res) => {
 
     let post = await Post.findById(req.params.id);
-
-    res.render('home/post', {post: post});
+    let category = await Category.find({});
+    res.render('home/post', {post: post, category: category});
 });
 
 

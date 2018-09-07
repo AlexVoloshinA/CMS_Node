@@ -5,6 +5,7 @@ const {isEmpty,uploadDir} = require('../../helpers/upload-helper');
 const fs = require('fs');
 const path = require('path');
 const moment = require('moment');
+const Category = require('../../models/Category');
 
 router.all('/*', (req,res,next) => {
     req.app.locals.layout = 'admin';
@@ -13,15 +14,27 @@ router.all('/*', (req,res,next) => {
 
 router.get('/', async (req,res) => {
 
-    let Posts = await Post.find();
-    //debugger;
+    let Posts = await Post.find().populate('categories');
+    Posts.forEach(async el => {
+        debugger;
+        if(el.category != null){
+            console.log(el);
+            let categoryName = await Category.findById(el.category);
+            console.log(categoryName.name);
+            
+            el.category = categoryName.name;
+        }
+    });
     //let photosDir = __base + 'public/uploads/';
 
     res.render('admin/posts/index', {posts: Posts});
 });
 
-router.get('/create', (req,res) => {
-    res.render('admin/posts/create');
+router.get('/create', async (req,res) => {
+
+    let categories = await  Category.find({});
+
+    res.render('admin/posts/create', {categories : categories});
 });
 
 router.post('/create', async (req,res) => {
@@ -66,7 +79,8 @@ router.post('/create', async (req,res) => {
           status: req.body.status,
           allowComments: allowComments,
           body: req.body.body,
-          file: filename
+          file: filename,
+          category: req.body.category
      });
 
     newPost.save().then(savedPost => {
@@ -86,8 +100,10 @@ router.get('/edit/:id',async (req,res) => {
 
     let findPost = await Post.findById(req.params.id);
 
+    let categories = await Category.find({});
+
     //res.send(req.params.id);
-    res.render('admin/posts/edit', {post: findPost});
+    res.render('admin/posts/edit', {post: findPost, categories: categories});
 });
 
 router.put('/edit/:id', async (req,res) => {
@@ -104,6 +120,7 @@ router.put('/edit/:id', async (req,res) => {
     post.status = req.body.status;
     post.allowComments = allowComments;
     post.body = req.body.body;
+    post.category = req.body.category;
 
     
 

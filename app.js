@@ -21,9 +21,9 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 //Set view engine
 
-const {select, generateDate} = require('./helpers/handlebars-helpers');
+const {select, generateDate, getCategory} = require('./helpers/handlebars-helpers');
 
-app.engine('handlebars', exprhb({defaultLayout: 'home', helpers: {select: select, generateDate: generateDate}}));
+app.engine('handlebars', exprhb({defaultLayout: 'home', helpers: {select: select, generateDate: generateDate, getCategory: getCategory}}));
 app.set('view engine','handlebars');
 
 
@@ -57,7 +57,6 @@ app.use(flash());
 //Local variables using Middleware
 
 app.use((req,res,next) => {
-    debugger;
     res.locals.success_message = req.flash('success_message');
     next();
 });
