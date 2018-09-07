@@ -8,11 +8,12 @@ const methodOverride = require('method-override');
 const upload = require('express-fileupload');
 const session = require('express-session');
 const flash = require('connect-flash');
+const {mongoDbUrl} = require('./config/database');
 
 process.env.PWD = process.cwd();
 mongoose.Promise = global.Promise;
 
-mongoose.connect('mongodb://localhost:27017/cms').then((db) => {
+mongoose.connect(mongoDbUrl).then((db) => {
     console.log('Connected');
     
 }).catch(err => console.log(err));

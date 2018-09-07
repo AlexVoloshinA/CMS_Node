@@ -20,7 +20,6 @@ router.get('/', async (req,res) => {
         if(el.category != null){
             console.log(el);
             let categoryName = await Category.findById(el.category);
-            console.log(categoryName.name);
             
             el.category = categoryName.name;
         }
