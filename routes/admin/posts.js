@@ -30,6 +30,12 @@ router.get('/', async (req,res) => {
     res.render('admin/posts/index', {posts: Posts});
 });
 
+// router.get('/my-posts', async (req,res) => {
+//     let posts = await Post.find().populate('categories');
+
+//     res.render('/admin/my-posts', {posts: posts});
+// });
+
 router.get('/create', async (req,res) => {
 
     let categories = await  Category.find({});
@@ -73,6 +79,7 @@ router.post('/create', async (req,res) => {
       } else {
           allowComments = false;
       }
+
     
       const newPost = new Post({
           title: req.body.title,
@@ -143,7 +150,14 @@ router.put('/edit/:id', async (req,res) => {
 });
 
 router.delete('/:id', async (req,res) => {
-    let post = await Post.findById(req.params.id);
+    let post = await Post.findById(req.params.id).populate('comments');
+
+    if(!post.comments.length < 1){
+        post.comments.forEach(async comment => {
+            await comment.remove();
+        });
+    }
+
 
     await fs.unlink(uploadDir + post.file);
 
