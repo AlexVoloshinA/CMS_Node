@@ -8,8 +8,12 @@ router.all('/*', (req,res,next) => {
     next();
 });
 
-router.get('/', (req,res) => {
-    res.render('admin/index');
+router.get('/', async (req,res) => {
+
+    let postCount = await Post.count();
+
+
+    res.render('admin/index', {postCount: postCount});
 });
 
 
@@ -22,6 +26,7 @@ router.post('/generate-fake-posts', async (req,res) => {
       post.title = faker.name.title();
       post.status = 'Public';
       post.allowComments = faker.random.boolean();
+      post.slug = faker.name.title();
       post.body = faker.lorem.sentences();
 
       await post.save();

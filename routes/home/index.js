@@ -14,16 +14,23 @@ router.all('/*', (req,res,next) => {
 
 router.get('/', async (req,res) => {
 
-    let posts = await Post.find();
+    const perPage = 10;
+    const page = req.query.page || 1;
+
+    let posts = await Post.find()
+        .skip((perPage*page) - perPage)
+        .limit(perPage);
 
     let category = await Category.find({});
+
+    let postCount = await  Post.count();
 
     // req.session.alex = 'Alex Voloshin';
 
     // if(req.session.alex){
     //     console.log(`We found it ${req.session.alex}`);
     // }
-    res.render('home/index', {posts: posts, category: category});
+    res.render('home/index', {posts: posts, category: category, current: parseInt(page), pages: Math.ceil(postCount / perPage)});
 });
 
 router.get('/about', (req,res) => {
@@ -155,9 +162,9 @@ router.post('/register', async (req,res) => {
 
 });
 
-router.get('/post/:id', async (req,res) => {
+router.get('/post/:slug', async (req,res) => {
 
-    let post = await Post.findById(req.params.id)
+    let post = await Post.findOne({slug: req.params.slug})
     
     .populate('user')
     .populate({path: 'comments', match: {approveComment: true}, populate: {path: 'user', model: 'users'}});
