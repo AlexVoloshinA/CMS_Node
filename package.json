@@ -10,6 +10,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@types/jquery": "^3.3.6",
     "bcryptjs": "^2.4.3",
     "body-parser": "^1.18.3",
     "connect-flash": "^0.1.1",
@@ -23,5 +24,10 @@
     "mongoose": "^5.2.13",
     "passport": "^0.4.0",
     "passport-local": "^1.0.0"
+  },
+  "typeAcquisition": {
+    "include": [
+      "jquery"
+    ]
   }
 }

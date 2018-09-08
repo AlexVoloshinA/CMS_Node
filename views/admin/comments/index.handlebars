@@ -5,6 +5,7 @@
     <tr>
       <th scope="col">Id</th>
       <th scope="col">Owner</th>
+      <th scope="col">Status</th>
       <th scope="col">Date</th>
     </tr>
   </thead>
@@ -13,6 +14,7 @@
         <tr>
             <td>{{id}}</td>
             <td>{{user.firstName}}</td>
+            <td><input {{#if approveComment}} checked {{/if}} data-id="{{id}}" type="checkbox" name="approvedComment"></td>
             <td>{{generateDate date 'MMM Do YYYY'}}</td>
             <td>
                 <form action="/admin/comments/delete/{{id}}?_method=DELETE" method="POST">

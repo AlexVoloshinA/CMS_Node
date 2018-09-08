@@ -49,10 +49,15 @@ router.delete('/delete/:id', async (req,res) => {
     res.redirect('/admin/comments');
 });
 
-
-
-
-
+router.post('/approve-comment',async (req, res) => {
+    
+    let comment = await Comment.findByIdAndUpdate(req.body.id, {$set: {
+        approveComment: req.body.approveComment,
+    }}, {new: true});
+    
+    
+    res.send(comment);
+});
 
 
 
