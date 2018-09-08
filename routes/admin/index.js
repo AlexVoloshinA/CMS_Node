@@ -1,6 +1,8 @@
 const express = require('express');
 const router = express.Router();
 const Post = require('../../models/Post');
+const Category = require('../../models/Category');
+const Comment = require('../../models/Comment');
 const faker = require('faker');
 
 router.all('/*', (req,res,next) => {
@@ -10,10 +12,20 @@ router.all('/*', (req,res,next) => {
 
 router.get('/', async (req,res) => {
 
-    let postCount = await Post.count();
+    const promises = [
+        Post.count().exec(),
+        Category.count().exec(),
+        Comment.count().exec()
+    ];
+
+    Promise.all(promises).then(([postCount, categoryCount, commentCount]) => {
+        res.render('admin/index', {postCount: postCount, categoryCount: categoryCount, commentCount: commentCount });
+    });
+
+    // let postCount = await Post.count();
 
 
-    res.render('admin/index', {postCount: postCount});
+    
 });
 
 
